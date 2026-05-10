@@ -1,7 +1,9 @@
 package ru.otus.marketsample.details.feature
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +17,17 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import ru.otus.marketsample.details.domain.ConsumeProductDetailsUseCase
 import ru.otus.marketsample.R
+import ru.otus.marketsample.ui.UiText
+import javax.inject.Inject
 
-class DetailsViewModel(
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
     private val consumeProductDetailsUseCase: ConsumeProductDetailsUseCase,
     private val detailsStateFactory: DetailsStateFactory,
-    private val productId: String,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    private val productId: String = checkNotNull(savedStateHandle["productId"])
 
     private val _state = MutableStateFlow(DetailsScreenState())
     val state: StateFlow<DetailsScreenState> = _state.asStateFlow()
@@ -48,7 +55,7 @@ class DetailsViewModel(
                 _state.update { screenState ->
                     screenState.copy(
                         hasError = true,
-                        errorProvider = { context -> context.getString(R.string.error_wile_loading_data) }
+                        errorMessage = UiText.StringResource(R.string.error_wile_loading_data)
                     )
                 }
             }

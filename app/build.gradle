@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -29,11 +30,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
+    composeCompiler {
+        reportsDestination = layout.buildDirectory.dir("compose_compiler")
+        metricsDestination = layout.buildDirectory.dir("compose_compiler")
+        enableStrongSkippingMode = true
+        stabilityConfigurationFile = rootProject.file("compose-stability.conf")
     }
     buildFeatures {
-        viewBinding true
+        viewBinding false // так как XML-лейаутов больше нет
+        compose true
     }
 }
 
@@ -47,14 +52,8 @@ dependencies {
     implementation libs.core.ktx
     implementation libs.appcompat
     implementation libs.material
-    implementation libs.constraintlayout
-    implementation libs.swipetorefresh
-    implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
-    implementation libs.fragment.ktx
     implementation libs.lifecycle.runtime.ktx
-    implementation libs.navigation.fragment.ktx
-    implementation libs.navigation.ui.ktx
     implementation libs.coil
     implementation libs.gson
     implementation libs.bundles.network
@@ -63,8 +62,14 @@ dependencies {
     implementation libs.androidx.datastore
     implementation libs.androidx.datastore.preferences
 
-    implementation libs.dagger
-    kapt libs.daggerCompiler
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.bundles.compose
+    implementation libs.kotlinx.collections.immutable
+    debugImplementation libs.androidx.compose.ui.tooling
+
+    implementation libs.hilt.android
+    ksp libs.hilt.compiler
+    implementation libs.hilt.navigation.compose
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit

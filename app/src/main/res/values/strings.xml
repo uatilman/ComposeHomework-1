@@ -6,4 +6,7 @@
     <string name="error_wile_loading_data">Error wile loading data</string>
     <string name="title_promo">Promo</string>
     <string name="title_details">Details</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="action_add_to_cart">Add to cart</string>
+    <string name="preview_products_screen">Products Screen</string>
 </resources>

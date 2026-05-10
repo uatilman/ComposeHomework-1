@@ -6,6 +6,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
@@ -14,6 +17,7 @@ import ru.otus.common.data.promo.PromoApiService
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 object DataModule {
 
     @Singleton
@@ -43,7 +47,7 @@ object DataModule {
     @Singleton
     @Provides
     fun provideDataStoreOfPreferences(
-        applicationContext: Context
+        @ApplicationContext applicationContext: Context
     ): DataStore<Preferences> {
         return applicationContext.appDataStore
     }

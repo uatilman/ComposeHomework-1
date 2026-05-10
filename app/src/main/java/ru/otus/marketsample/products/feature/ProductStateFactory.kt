@@ -1,12 +1,10 @@
 package ru.otus.marketsample.products.feature
 
-import ru.otus.common.di.FeatureScope
-import ru.otus.marketsample.products.domain.Product
 import ru.otus.common.formatters.DiscountFormatter
 import ru.otus.common.formatters.PriceFormatter
+import ru.otus.marketsample.products.domain.Product
 import javax.inject.Inject
 
-@FeatureScope
 class ProductStateFactory @Inject constructor(
     private val discountFormatter: DiscountFormatter,
     private val priceFormatter: PriceFormatter,
